@@ -15,7 +15,8 @@ public class AccountTest extends TestCase{
     @Test
     public void test1() throws AccountException
     {
-        Account a = new Account();
+        final String ACCOUNT_ID = "testAccount";
+        Account a = new Account(ACCOUNT_ID);
 
         boolean ok=false;
         try{
@@ -69,6 +70,12 @@ public class AccountTest extends TestCase{
         if( tl.size() !=2 )
         {
             throw new RuntimeException("test1 failed (11)");
+        }
+
+        String id = a.getIdentifier();
+        if( (id==null) || !id.equals(ACCOUNT_ID) )
+        {
+            throw new RuntimeException("test1 failed (12)");
         }
     }
 }

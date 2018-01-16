@@ -33,9 +33,19 @@ public class Account
 
     public static final int INITIAL_BALANCE = 0;
     private int balance = INITIAL_BALANCE;
+
+    private String identifier;
     
-    public Account()
+    public Account(String identifier) throws AccountException
     {
+        if( (identifier==null) || (identifier.length()==0))
+            throw new AccountException("Account.Account(): identifier is missing or empty");
+        this.identifier = identifier;
+    }
+
+    public synchronized String getIdentifier()
+    {
+        return this.identifier;
     }
     
     private synchronized void transaction(int amount)
@@ -83,6 +93,7 @@ public class Account
         // 24.12.2015   +500     500
         // 23.8.2015    -100     400
         List<Transaction> tl = this.getTransactionList();
+        System.out.println(String.format("Balance for Account %s", this.getIdentifier() ) );
         System.out.println(String.format("%-10s   %-10s   %-10s","Date","Amount","Balance"));
         int currentBalance = INITIAL_BALANCE;
         for( Transaction t : tl )
