@@ -22,6 +22,11 @@ public class Account
         {
             return amount;
         }
+
+        public long getTime()
+        {
+            return time;
+        }
     }
 
     private List<Transaction> transactionList = new ArrayList<>();
@@ -33,9 +38,10 @@ public class Account
     {
     }
     
-    private void transaction(int amount)
+    private synchronized void transaction(int amount)
     {
         this.transactionList.add( new Transaction(amount) );
+        this.balance += amount;
     }
 
     public boolean verify()
@@ -62,11 +68,30 @@ public class Account
         transaction(-amount);
     }
 
+    public synchronized List<Transaction> getTransactionList()
+    {
+        return new ArrayList<Transaction>( this.transactionList );
+    }
+
+    public synchronized int getBalance() {
+        return balance;
+    }
+
     public void printStatement()
     {
         // Date         Amount   Balance
         // 24.12.2015   +500     500
         // 23.8.2015    -100     400
+        List<Transaction> tl = this.getTransactionList();
+        System.out.println(String.format("%-10s   %-10s   %-10s","Date","Amount","Balance"));
+        int currentBalance = INITIAL_BALANCE;
+        for( Transaction t : tl )
+        {
+            int amount = t.getAmount();
+            currentBalance += amount;
+            String amountString = ( (amount>0) ? "+" : "") + Integer.toString(amount);
+            System.out.println(String.format("%1$td.%1$tm.%1$tY   %2$-10s   %3$-10d",t.getTime(),amountString,currentBalance));
+        }
     }
 }
 
