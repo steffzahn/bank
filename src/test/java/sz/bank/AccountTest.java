@@ -28,36 +28,46 @@ public class AccountTest extends TestCase{
         if( !ok ) {
             throw new RuntimeException("test1 failed (1)");
         }
+        ok=false;
+        try{
+            a.withdraw( -5 );
+        } catch (AccountException e)
+        {
+            ok = true;
+        }
+        if( !ok ) {
+            throw new RuntimeException("test1 failed (2)");
+        }
         a.deposit(500);
         if( !a.verify() )
-            throw new RuntimeException("test1 failed (2)");
+            throw new RuntimeException("test1 failed (3)");
         if( a.getBalance() != 500 )
         {
-            throw new RuntimeException("test1 failed (3)");
+            throw new RuntimeException("test1 failed (4)");
         }
         a.withdraw(100);
         if( !a.verify() )
-            throw new RuntimeException("test1 failed (4)");
+            throw new RuntimeException("test1 failed (5)");
         if( a.getBalance() != 400 )
         {
-            throw new RuntimeException("test1 failed (5)");
+            throw new RuntimeException("test1 failed (6)");
         }
         List<Account.Transaction> tl = a.getTransactionList();
         if( tl==null )
         {
-            throw new RuntimeException("test1 failed (6)");
+            throw new RuntimeException("test1 failed (7)");
         }
         if( tl.size() !=2 )
         {
-            throw new RuntimeException("test1 failed (7)");
+            throw new RuntimeException("test1 failed (8)");
         }
         if( tl.get(0).getAmount() != 500 )
         {
-            throw new RuntimeException("test1 failed (8)");
+            throw new RuntimeException("test1 failed (9)");
         }
         if( tl.get(1).getAmount() != -100 )
         {
-            throw new RuntimeException("test1 failed (9)");
+            throw new RuntimeException("test1 failed (10)");
         }
 
         // verify that this is actually a copy of the list
@@ -65,17 +75,40 @@ public class AccountTest extends TestCase{
         tl = a.getTransactionList();
         if( tl==null )
         {
-            throw new RuntimeException("test1 failed (10)");
+            throw new RuntimeException("test1 failed (11)");
         }
         if( tl.size() !=2 )
         {
-            throw new RuntimeException("test1 failed (11)");
+            throw new RuntimeException("test1 failed (12)");
         }
 
         String id = a.getIdentifier();
         if( (id==null) || !id.equals(ACCOUNT_ID) )
         {
-            throw new RuntimeException("test1 failed (12)");
+            throw new RuntimeException("test1 failed (13)");
         }
+
+        ok=false;
+        try{
+        	Account a2 = new Account(null);
+        } catch (AccountException e)
+        {
+            ok = true;
+        }
+        if( !ok ) {
+            throw new RuntimeException("test1 failed (14)");
+        }
+        ok=false;
+        try{
+        	Account a2 = new Account("");
+        } catch (AccountException e)
+        {
+            ok = true;
+        }
+        if( !ok ) {
+            throw new RuntimeException("test1 failed (15)");
+        }
+        a.printStatement();
+        
     }
 }
