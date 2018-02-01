@@ -11,15 +11,31 @@ public class Account
     {
         private int amount;
         private long time;
+        private boolean immutable;
 
         public Transaction(int amount)
         {
             this.amount = amount;
             this.time = System.currentTimeMillis();
+            this.immutable = true;
         }
-        
+        private Transaction(int amount, boolean immutable)
+        {
+            this.amount = amount;
+            this.time = System.currentTimeMillis();
+            this.immutable = immutable;
+        }
+
         public int getAmount()
         {
+            return amount;
+        }
+        private int incrementAmount(int increment)
+        {
+            if( !immutable )
+            {
+                amount += increment;
+            }
             return amount;
         }
 
@@ -95,14 +111,15 @@ public class Account
         List<Transaction> tl = this.getTransactionList();
         System.out.println(String.format("Balance for Account %s", this.getIdentifier() ) );
         System.out.println(String.format("%-10s   %-10s   %-10s","Date","Amount","Balance"));
-        int currentBalance = INITIAL_BALANCE;
-        for( Transaction t : tl )
-        {
-            int amount = t.getAmount();
-            currentBalance += amount;
-            String amountString = ( (amount>0) ? "+" : "") + Integer.toString(amount);
-            System.out.println(String.format("%1$td.%1$tm.%1$tY   %2$-10s   %3$-10d",t.getTime(),amountString,currentBalance));
-        }
+        tl.stream()
+                .reduce( new Transaction(INITIAL_BALANCE, false),
+                        (acc, t) ->
+                            {
+                                int amount= t.getAmount();
+                                int currentBalance = acc.incrementAmount(amount);
+                                String amountString = ( (amount>0) ? "+" : "") + Integer.toString(amount);
+                                System.out.println(String.format("%1$td.%1$tm.%1$tY   %2$-10s   %3$-10d",t.getTime(),amountString,currentBalance));
+                                return acc;
+                            });
     }
 }
-
