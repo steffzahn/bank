@@ -4,6 +4,7 @@ package sz.bank;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class Account
 {
 
@@ -13,6 +14,7 @@ public class Account
         private long time;
         private boolean immutable;
 
+        @SuppressWarnings("WeakerAccess")
         public Transaction(int amount)
         {
             this.amount = amount;
@@ -26,6 +28,7 @@ public class Account
             this.immutable = immutable;
         }
 
+        @SuppressWarnings("WeakerAccess")
         public int getAmount()
         {
             return amount;
@@ -39,6 +42,7 @@ public class Account
             return amount;
         }
 
+        @SuppressWarnings("WeakerAccess")
         public long getTime()
         {
             return time;
@@ -47,11 +51,13 @@ public class Account
 
     private List<Transaction> transactionList = new ArrayList<>();
 
+    @SuppressWarnings("WeakerAccess")
     public static final int INITIAL_BALANCE = 0;
     private int balance = INITIAL_BALANCE;
 
     private String identifier;
     
+    @SuppressWarnings("WeakerAccess")
     public Account(String identifier) throws AccountException
     {
         if( (identifier==null) || (identifier.length()==0))
@@ -59,6 +65,7 @@ public class Account
         this.identifier = identifier;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public synchronized String getIdentifier()
     {
         return this.identifier;
@@ -70,6 +77,7 @@ public class Account
         this.balance += amount;
     }
 
+    @SuppressWarnings({"WeakerAccess", "BooleanMethodIsAlwaysInverted"})
     public boolean verify()
     {
         int verifiedBalance = INITIAL_BALANCE;
@@ -80,6 +88,7 @@ public class Account
         return ( this.balance == verifiedBalance );
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void deposit(int amount) throws AccountException
     {
         if( amount <= 0 )
@@ -87,6 +96,7 @@ public class Account
         transaction(amount);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void withdraw(int amount) throws AccountException
     {
         if( amount <= 0 )
@@ -94,15 +104,18 @@ public class Account
         transaction(-amount);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public synchronized List<Transaction> getTransactionList()
     {
-        return new ArrayList<Transaction>( this.transactionList );
+        return new ArrayList<>( this.transactionList );
     }
 
+    @SuppressWarnings("WeakerAccess")
     public synchronized int getBalance() {
         return balance;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void printStatement()
     {
         // Date         Amount   Balance
@@ -111,6 +124,7 @@ public class Account
         List<Transaction> tl = this.getTransactionList();
         System.out.println(String.format("Balance for Account %s", this.getIdentifier() ) );
         System.out.println(String.format("%-10s   %-10s   %-10s","Date","Amount","Balance"));
+        //noinspection ResultOfMethodCallIgnored
         tl.stream()
                 .reduce( new Transaction(INITIAL_BALANCE, false),
                         (acc, t) ->
