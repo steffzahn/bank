@@ -7,6 +7,7 @@ import java.util.List;
 
 class AccountTest {
 
+    @SuppressWarnings("WeakerAccess")
     @BeforeAll
     public static void before() {
         System.out.println("Start tests");

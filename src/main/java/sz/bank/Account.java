@@ -131,7 +131,7 @@ public class Account
                             {
                                 int amount= t.getAmount();
                                 int currentBalance = acc.incrementAmount(amount);
-                                String amountString = ( (amount>0) ? "+" : "") + Integer.toString(amount);
+                                String amountString = ( (amount>0) ? "+" : "") + amount;
                                 System.out.println(String.format("%1$td.%1$tm.%1$tY   %2$-10s   %3$-10d",t.getTime(),amountString,currentBalance));
                                 return acc;
                             });
